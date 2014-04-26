@@ -45,8 +45,8 @@ module ActionController
     def permit!
       each_pair do |key, value|
         value = convert_hashes_to_parameters(key, value)
-        Array.wrap(value).each do |_|
-          _.permit! if _.respond_to? :permit!
+        Array.wrap(value).each do |parameter|
+          parameter.permit! if parameter.respond_to? :permit!
         end
       end
 
@@ -121,7 +121,7 @@ module ActionController
 
       def convert_value_to_parameters(value)
         if value.is_a?(Array)
-          value.map { |_| convert_value_to_parameters(_) }
+          value.map { |v| convert_value_to_parameters(v) }
         elsif value.is_a?(Parameters) || !value.is_a?(Hash)
           value
         else
